@@ -1,17 +1,27 @@
-import * as fs from 'fs'
-import * as dotenv from 'dotenv'
-import express from 'express'
+const fs = require('fs')
+const express = require('express')
+const morgan = require('morgan')
+const cors  = require('cors')
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
-import auth from './routes/auth'
+require('dotenv').config()
 
-dotenv.config()
+import authRoutes from './routes/auth'
 
 const app = express()
 
-app.use('/api', auth)
+app.use(morgan('tiny'))
+app.use(bodyParser.json())
+// app.use(cors())
+if (process.env.NODE_ENV === 'development') {
+    app.use(cors({origin: `http://localhost:3000`}))
+}
 
-const port = dotenv.parse(fs.readFileSync(`${process.env.NODE_ENV}.env`)).PORT
+app.use('/api', authRoutes)
+
+const port = process.env.PORT || 8000
 
 app.listen(port, () => {
-    console.log(`API is running on port ${port}`)
+    console.log(`API is running on port ${port} - ${process.env.NODE_ENV}`)
 })
