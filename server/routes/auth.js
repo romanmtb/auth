@@ -1,8 +1,11 @@
 import express from 'express'
-import {signUp} from '../controllers/auth'
-
 const router = express.Router()
 
-router.get('/signup', signUp)
+import {signUp} from '../controllers/auth'
+
+const {userSignupValidator} = require('../validators/auth')
+const {runValidation} = require('../validators')
+
+router.post('/signup', userSignupValidator, runValidation, signUp)
 
 export default router
