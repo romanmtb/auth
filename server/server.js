@@ -11,6 +11,15 @@ import authRoutes from './routes/auth'
 
 const app = express()
 
+mongoose.connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+})
+    .then(() => console.log('DB connected'))
+    .catch(error => console.log('DB CONNECTION ERROR', error))
+
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
 // app.use(cors())
