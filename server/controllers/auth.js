@@ -1,9 +1,48 @@
-export const signUp = async (req, res) => {
-    console.log('REQ BODY ON SIGNUP', req.body)
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const sgMail = require('@sendgrid/mail')
+require('dotenv').config()
 
-    try {
-        res.json({data: 'You hit signup endpoint'})
-    } catch (error) {
-        res.status(500).send(error.toString())
-    }
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+exports.signUp = (req, res) => {
+    const {name, email, password} = req.body
+
+    User.findOne({email}).exec((err, user) => {
+        if (user) {
+            return res.status(400).json({
+                error: 'Email is taken'
+            })
+        }
+
+        const token = jwt.sign({name, email, password}, process.env.JWT_ACCOUNT_ACTIVATION, {expiresIn: '10m'})
+
+        const emailData = {
+            from: process.env.EMAIL_FROM,
+            to: email,
+            subject: `Account activation link`,
+            html: `
+                <h1>Please use the following link to activate your account<h1/>
+                <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
+                <hr />
+                <p>This email may content sensitive information</p>
+                <p>${process.env.CLIENT_URL}</p>
+            `
+        }
+
+        sgMail.send(emailData)
+            .then(sent => {
+                console.log('SIGNUP EMAIL SENT', sent)
+                return res.json({
+                    message: `Email has been sent to ${email}. Follow the instructions to activate your account`
+                })
+            })
+            .catch(err => {
+                console.log('SIGNUP EMAIL SENT ERROR', err)
+                return res.json({
+                    message: err.message
+                })
+            })
+    })
+
 }
