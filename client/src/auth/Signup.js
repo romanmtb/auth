@@ -3,6 +3,7 @@ import {Link, Redirect} from 'react-router-dom'
 import Layout from '../core/Layout'
 import axios from 'axios'
 import {ToastContainer, toast} from 'react-toastify'
+import {isAuth} from './helpers'
 import 'react-toastify/dist/ReactToastify.min.css'
 
 const Signup = () => {

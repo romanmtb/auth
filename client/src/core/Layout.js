@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react'
 import {Link, withRouter} from 'react-router-dom'
+import {isAuth, signOut} from '../auth/helpers'
 
 const Layout = ({children, history, match}) => {
     const isActive = path => {
@@ -18,16 +19,37 @@ const Layout = ({children, history, match}) => {
                     Home
                 </Link>
             </li>
-            <li className="nav-item">
-                <Link to={'/signin'} style={isActive('/signin')} className="nav-link">
-                    Sign In
-                </Link>
-            </li>
-            <li className="nav-item">
-                <Link to={'/signup'} style={isActive('/signup')} className="nav-link">
-                    Signup
-                </Link>
-            </li>
+
+            {!isAuth() && (
+                <Fragment>
+                    <li className="nav-item">
+                        <Link to={'/signin'} style={isActive('/signin')} className="nav-link">
+                            Sign In
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to={'/signup'} style={isActive('/signup')} className="nav-link">
+                            Signup
+                        </Link>
+                    </li>
+                </Fragment>
+            )}
+
+            {isAuth() && (
+                <li className="nav-item">
+                    <span className="nav-link">{isAuth().name}</span>
+                </li>
+            )}
+
+            {isAuth() && (
+                <li className="nav-item">
+                    <span style={{cursor: 'pointer', color: '#fff'}} onClick={() => {
+                        signOut(() => {
+                            history.push('/')
+                        })
+                    }} className="nav-link">Sign Out</span>
+                </li>
+            )}
         </ul>
     )
 
