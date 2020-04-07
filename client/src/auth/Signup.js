@@ -4,7 +4,6 @@ import Layout from '../core/Layout'
 import axios from 'axios'
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import {resolveToLocation} from 'react-router-dom/modules/utils/locationUtils'
 
 const Signup = () => {
     const [values, setValues] = useState({
