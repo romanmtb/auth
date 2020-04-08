@@ -22,3 +22,10 @@ exports.userSignInValidator = [
         .isLength({min: 6})
         .withMessage('Password must be at least 6 characters long'),
 ]
+
+exports.userUpdateValidation = [
+    check('name')
+        .not()
+        .isEmpty()
+        .withMessage('Name is required'),
+]

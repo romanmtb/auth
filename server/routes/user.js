@@ -1,8 +1,14 @@
 import express from 'express'
 const router = express.Router()
 
-import {read} from '../controllers/user'
+import {read, update} from '../controllers/user'
 
-router.get('/user/:id', read)
+const {userUpdateValidation} = require('../validators/auth')
+const {runValidation} = require('../validators')
+
+const {requireSignin} = require('../controllers/auth')
+
+router.get('/user/:id', requireSignin, read)
+router.put('/user/update', [requireSignin, userUpdateValidation, runValidation], update)
 
 export default router
