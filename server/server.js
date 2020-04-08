@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 
 import authRoutes from './routes/auth'
+import userRoutes from './routes/user'
 
 const app = express()
 
@@ -28,6 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/api', authRoutes)
+app.use('/api', userRoutes)
 
 const port = process.env.PORT || 8000
 
