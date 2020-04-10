@@ -2,19 +2,19 @@ import React from 'react'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
 
-const Google = () => {
+const Google = ({informParent = f => f}) => {
 
     const responseGoogle = response => {
-        console.log(response.tokenId)
+        console.log(response)
 
         axios({
             method: 'POST',
-            url: `${process.env.REACT_APP_API}/google/login`,
+            url: `${process.env.REACT_APP_API}/google-login`,
             data: {idToken: response.tokenId}
         })
             .then(response => {
                 console.log('GOOGLE SIGN IN SUCCESS', response)
-
+                informParent(response)
             })
             .catch(error => {
                 console.log('GOOGLE SIGN IN ERROR', error.response)

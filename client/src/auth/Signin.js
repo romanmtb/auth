@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Link, Redirect} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import Layout from '../core/Layout'
 import axios from 'axios'
 import {ToastContainer, toast} from 'react-toastify'
@@ -43,6 +43,12 @@ const Signin = ({history}) => {
             })
     }
 
+    const informParent = response => {
+        authenticate(response, () => {
+            isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private')
+        })
+    }
+
     const {email, password, buttonText} = values
 
     const signinForm = () => (
@@ -71,7 +77,7 @@ const Signin = ({history}) => {
                 <ToastContainer />
                 {isAuth() && <Redirect to={'/'}/>}
                 <h1 className="p-5 text-center">Sign In</h1>
-                <Google />
+                <Google informParent={informParent}/>
                 {signinForm()}
             </div>
         </Layout>

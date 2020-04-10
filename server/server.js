@@ -23,10 +23,10 @@ mongoose.connect(process.env.DATABASE, {
 
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
-// app.use(cors())
-if (process.env.NODE_ENV === 'development') {
-    app.use(cors({origin: `http://localhost:3000`}))
-}
+app.use(cors())
+// if (process.env.NODE_ENV === 'development') {
+//     app.use(cors({origin: `http://localhost:3000`}))
+// }
 
 app.use('/api', authRoutes)
 app.use('/api', userRoutes)
